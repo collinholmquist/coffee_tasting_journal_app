@@ -10,7 +10,9 @@ module.exports = function(app) {
         next()
     })
 
-    app.get("/users/all", userController.allAccess)
+    app.get("/posts/all", userController.getAllPosts)
+    app.post("/posts/:id", userController.getUserPosts)
+    app.post("/posts", userController.create)
 
-    app.get("/users/user", authJwt.verifyToken, userController.userBoard)
+    //app.get("/users/user", authJwt.verifyToken, userController.userBoard)
 }

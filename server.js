@@ -18,10 +18,6 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
-
-
-
-
 require('./app/routes/auth.routes')(app)
 require('./app/routes/user.routes')(app)
 

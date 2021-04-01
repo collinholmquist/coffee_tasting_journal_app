@@ -1,7 +1,67 @@
-exports.allAccess = (req, res) => {
-    res.status(200).send("Public Content")
+const db = require('../models/index')
+const Post = db.post
+const User = db.user
+
+exports.getAllPosts = (req, res) => {
+
+    //get all posts that are marked with the public marking of true.  
+    Post.findAll({
+        where: {
+            public: true
+        }
+    }).then(posts => {
+        res.send(posts)
+    }).catch(err => {
+        res.status(500).send({message: err.message})
+    })
+    //res.status(200).send({message: "Public Posts"})
 }
 
-exports.userBoard = (req, res) => {
-    res.status(200).send("User Content")
+exports.getUserPosts = (req, res) => {
+
+    //ensure user exists, then find by pk
+
+    Post.findByPk(req.userId).then(posts =>{
+        res.send(posts)
+    }).catch(err => {
+        res.status(500).send({message: err.message})
+    })
+}
+
+exports.create = async (req, res) => {
+
+    const newPost = {
+        author_id: req.body.author_id,
+        roaster: req.body.roaster,
+        origin: req.body.origin,
+        brew_method: req.body.brew_method,
+        tasting_notes: req.body.tasting_notes,
+        rating: req.body.rating,
+        comments: req.body.comments,
+        public: req.body.public
+    }
+    
+   /* {
+        "author_id": 2,
+        "roaster": "Archetype",
+        "origin": "Kenya",
+        "brew_method": "Chemex",
+        "tasting_notes": "Berry and Citrus",
+        "rating": 5,
+        "comments": "Yummy",
+        "public": true
+    }*/
+    const user = await User.findOne({where: {id: req.body.author_id}})
+    const post = await Post.create(newPost)
+    //set the foreign key
+    post.setUser(user)
+    
+    res.status(200).send({message:"Successful Entry"})
+    /* Post.create(newPost).then(data => {
+        res.send(data)
+    }).catch(err => {
+        res.status(500).send({
+            message: err.message
+        })
+    }) */
 }
