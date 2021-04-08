@@ -20,10 +20,50 @@ exports.getAllPosts = (req, res) => {
 exports.getUserPosts = (req, res) => {
 
     //ensure user exists, then find by pk
-
-    Post.findByPk(req.userId).then(posts =>{
-        res.send(posts)
+    Post.findAll({
+        where: {
+            author_id: req.params.id
+        }
+    }).then(data =>{
+        res.send(data)
     }).catch(err => {
+        res.status(500).send({message: err.message})
+    })
+}
+
+exports.findOne = (req, res) => {
+
+    Post.findOne({
+        where: {
+            author_id: req.params.user_id,
+            id: req.params.post_id
+        }
+    }).then(data => {
+        res.send(data)
+    }).catch(err => {
+        res.status(500).send({message: err.message})
+    })
+}
+
+exports.updateOne = (req, res) => {
+
+    updatedPost = {
+        roaster: req.body.from_post.roaster,
+        origin: req.body.from_post.origin,
+        brew_method: req.body.from_post.brew_method,
+        tasting_notes: req.body.from_post.tasting_notes,
+        rating: req.body.from_post.rating,
+        comments: req.body.from_post.comments,
+        public: req.body.from_post.public
+    }
+
+    Post.update(updatedPost,{
+        where: {
+            id: req.params.post_id
+        }
+    }).then(data => {
+        res.send(data)
+    }). catch(err => {
         res.status(500).send({message: err.message})
     })
 }
