@@ -105,3 +105,19 @@ exports.create = async (req, res) => {
         })
     }) */
 }
+
+exports.deleteOne = (req, res) => {
+
+   Post.destroy({
+       where: {
+        id: req.params.post_id
+       }
+   }).then(data => {
+        res.send({message: 'Deletion Successful'})
+   }).catch(err => {
+       console.log(err)
+       res.status(500).send({message: err.message})
+   })
+
+   
+}

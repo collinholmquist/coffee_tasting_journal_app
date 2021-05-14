@@ -15,6 +15,7 @@ module.exports = function(app) {
     app.post("/posts", userController.create)
     app.get("/posts/:user_id/:post_id", userController.findOne)
     app.put("/posts/:user_id/:post_id", userController.updateOne)
+    app.delete("/posts/:user_id/:post_id", userController.deleteOne)
     //app.post("/posts/:user_id/:post_id", userController.)
 
     //app.get("/users/user", authJwt.verifyToken, userController.userBoard)
